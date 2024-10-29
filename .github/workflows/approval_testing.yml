@@ -18,7 +18,7 @@ jobs:
 
   pull_request_review_if_main:
     name: Pass if head.ref is main
-    if: ${{ github.event.pull_request.head.ref == 'main' }}
+    if: ${{ github.event.pull_request.base.ref == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Success
@@ -26,7 +26,7 @@ jobs:
 
   pull_request_review_if_main_and_approved:
     name: Pass is head ref is main and approved
-    if: ${{ github.event.pull_request.head.ref == 'main' && github.event.review.state == 'approved' }}
+    if: ${{ github.event.pull_request.base.ref == 'main' && github.event.review.state == 'approved' }}
     runs-on: ubuntu-latest
     steps:
       - name: Success
