@@ -8,15 +8,16 @@ on:
 
 jobs:
   debug:
-  runs-on: ubuntu-latest
-  steps:
-    - name: 'head.ref'
-      run: echo ${{ github.event.pull_request.head.ref }}
-    - name: 'base.ref'
-      run: echo ${{ github.event.pull_request.base.ref }}
+    name: Debug
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'head.ref'
+        run: echo ${{ github.event.pull_request.head.ref }}
+      - name: 'base.ref'
+        run: echo ${{ github.event.pull_request.base.ref }}
 
   pull_request_review_if_main:
-    name: 
+    name: Pass if head.ref is main
     if: github.event.pull_request.head.ref == 'main'
     runs-on: ubuntu-latest
     steps:
@@ -24,7 +25,7 @@ jobs:
         run: echo Success...
 
   pull_request_review_if_main_and_approved:
-    name: 
+    name: Pass is head ref is main and approved
     if: github.event.pull_request.head.ref == 'main' && github.event.review.state == 'approved'
     runs-on: ubuntu-latest
     steps:
