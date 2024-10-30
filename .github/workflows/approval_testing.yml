@@ -7,4 +7,36 @@ on:
   workflow_dispatch:
 
 jobs:
-  Debug:
+  debug:
+    name: Debug
+    runs-on: ubuntu-latest
+    outputs:
+      truthy-value: ${{ steps.output-truth.outputs.truthy-value }}
+    steps:
+      - name: 'head.ref'
+        run: 'echo ${{ github.event.pull_request.head.ref }}'
+      - name: 'base.ref'
+        run: 'echo ${{ github.event.pull_request.base.ref }}'
+      - name: 'github.event_name'
+        run: 'echo ${{ github.event_name}}'
+      - name: 'for conditional testing'
+        id: output-truth
+        run: 'echo "truthy-value=true" >> $GITHUB_OUTPUT'
+
+
+  pull_request_review_if_main:
+    name: Pass if head.ref is main
+    needs: [ debug ]
+    if: ${{ (github.event.pull_request.base.ref == 'main' || github.event_name == 'this-wont-work') && needs.debug.outputs.truthy-value == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Success
+        run: echo Success...
+
+  pull_request_review_if_main_and_approved:
+    name: Pass is head ref is main and approved
+    if: ${{ github.event.pull_request.base.ref == 'main' && github.event.review.state == 'approved' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Success
+        run: echo Success...
