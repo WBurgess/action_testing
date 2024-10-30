@@ -1,0 +1,62 @@
+name: Conditional Jobs
+
+on:
+  pull_request_review:
+    types: [ submitted ]
+
+  workflow_dispatch:
+
+jobs:
+  debug:
+    name: Debug
+    runs-on: ubuntu-latest
+    outputs:
+      truthy-value: ${{ steps.output-truth.outputs.truthy-value }}
+    steps:
+      - name: 'head.ref'
+        run: 'echo ${{ github.event.pull_request.head.ref }}'
+      - name: 'base.ref'
+        run: 'echo ${{ github.event.pull_request.base.ref }}'
+      - name: 'github.event_name'
+        run: 'echo ${{ github.event_name}}'
+      - name: 'for conditional testing'
+        id: output-truth
+        run: 'echo "truthy-value=true" >> $GITHUB_OUTPUT'
+
+
+  deploy-1:
+    name: Deploy One
+    needs: [ debug ]
+    runs-on: ubuntu-latest
+    outputs:
+      deploy-success: {{ steps.success-output.outputs.deploy-success }}
+    steps:
+      - name: Start
+        run: echo "Start"
+
+      - name: Finish
+        id: success-output
+        run: 'echo "deploy-success=true" >> $GITHUB_OUTPUT'
+
+  deploy-2:
+    name: Deply Two
+    needs: [ debug ]
+    runs-on: ubuntu-latest
+    outputs:
+      deploy-success: {{ steps.success-output.outputs.deploy-success }}
+    steps:
+      - name: Start
+        run: echo "Start"
+
+      - name: Finish
+        id: success-output
+        run: 'echo "deploy-success=true" >> $GITHUB_OUTPUT'
+
+  test:
+    name: Run tests
+    # needs: [ deploy-1, deploy-2 ]
+    if: {{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tests ran
+        run: 'echo Tests ran!'
