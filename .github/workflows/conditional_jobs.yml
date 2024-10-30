@@ -52,9 +52,18 @@ jobs:
         id: success-output
         run: 'echo "deploy-success=true" >> $GITHUB_OUTPUT'
 
-  test:
+  tests-no-needs:
     name: Run tests
     # needs: [ deploy-1, deploy-2 ]
+    if: ${{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tests ran
+        run: 'echo These dont run :('
+
+  tests-needs:
+    name: Run tests
+    needs: [ deploy-1, deploy-2 ]
     if: ${{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true' }}
     runs-on: ubuntu-latest
     steps:
