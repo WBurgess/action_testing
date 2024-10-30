@@ -91,7 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Tests ran
-        run: 'echo Tests did not run because of no always()'
+        run: 'echo Tests did not run because of no always'
 
   tests-needs-fail:
     name: Test always dep 1 and fail
@@ -100,4 +100,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Tests ran
-        run: 'echo Tests ran despite failure because of always()'
+        run: 'echo Tests ran despite failure because of always'
+
+  tests-needs-fail-second-false:
+    name: Test always dep 1, fail, second false
+    needs: [ deploy-1, deploy-fail ]
+    if: ${{ always() && (needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'false') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tests ran
+        run: 'echo Tests ran despite failure because of always'
