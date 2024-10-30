@@ -10,6 +10,8 @@ jobs:
   debug:
     name: Debug
     runs-on: ubuntu-latest
+    outputs:
+      truthy-value: ${{ steps.output-truth.outputs.truthy-value }}
     steps:
       - name: 'head.ref'
         run: 'echo ${{ github.event.pull_request.head.ref }}'
@@ -17,10 +19,14 @@ jobs:
         run: 'echo ${{ github.event.pull_request.base.ref }}'
       - name: 'github.event_name'
         run: 'echo ${{ github.event_name}}'
+      - name: 'for conditional testing'
+        id: output-truth
+        run: 'echo "truthy-value=true" >> $GITHUB_OUTPUT'
+
 
   pull_request_review_if_main:
     name: Pass if head.ref is main
-    if: ${{ github.event.pull_request.base.ref == 'main' }}
+    if: ${{ (github.event.pull_request.base.ref == 'main' || github.event_name == 'workflow_dispatch') && needs.debug.outputs.truthy-value }}
     runs-on: ubuntu-latest
     steps:
       - name: Success
