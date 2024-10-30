@@ -105,7 +105,7 @@ jobs:
   tests-needs-fail-second-false:
     name: Test always dep 1, fail, second false
     needs: [ deploy-1, deploy-fail ]
-    if: ${{ always() && (needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'false') }}
+    if: ${{ always() && (needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-1.outputs.deploy-success == 'false') }}
     runs-on: ubuntu-latest
     steps:
       - name: Tests ran
