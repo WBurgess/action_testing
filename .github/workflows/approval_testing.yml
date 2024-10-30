@@ -26,6 +26,7 @@ jobs:
 
   pull_request_review_if_main:
     name: Pass if head.ref is main
+    needs: [ debug ]
     if: ${{ (github.event.pull_request.base.ref == 'main' || github.event_name == 'workflow_dispatch') && needs.debug.outputs.truthy-value == 'true' }}
     runs-on: ubuntu-latest
     steps:
