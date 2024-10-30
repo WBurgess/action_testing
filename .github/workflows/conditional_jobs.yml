@@ -52,6 +52,20 @@ jobs:
         id: success-output
         run: 'echo "deploy-success=true" >> $GITHUB_OUTPUT'
 
+  deploy-fail:
+    name: Deply Fail
+    needs: [ debug ]
+    runs-on: ubuntu-latest
+    outputs:
+      deploy-success: ${{ steps.success-output.outputs.deploy-success }}
+    steps:
+      - name: Start
+        run: exit 1
+
+      - name: Finish
+        id: success-output
+        run: 'echo "deploy-success=true" >> $GITHUB_OUTPUT'
+
   tests-no-needs:
     name: Run tests
     # needs: [ deploy-1, deploy-2 ]
@@ -59,7 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Tests ran
-        run: 'echo These dont run :('
+        run: 'echo These dont run because of no needs dependency'
 
   tests-needs:
     name: Run tests
@@ -69,3 +83,21 @@ jobs:
     steps:
       - name: Tests ran
         run: 'echo Tests ran!'
+
+  tests-needs-fail-no-run:
+    name: Run tests
+    needs: [ deploy-1, deploy-fail ]
+    if: ${{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tests ran
+        run: 'echo Tests did not run because of no always()'
+
+  tests-needs-fail:
+    name: Run tests
+    needs: [ deploy-1, deploy-fail ]
+    if: ${{ always() && (needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tests ran
+        run: 'echo Tests ran despite failure because of always()'
