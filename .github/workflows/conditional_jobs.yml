@@ -67,7 +67,7 @@ jobs:
         run: 'echo "deploy-success=true" >> $GITHUB_OUTPUT'
 
   tests-no-needs:
-    name: Run tests
+    name: Test no needs statement dep 1 and 2
     # needs: [ deploy-1, deploy-2 ]
     if: ${{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true' }}
     runs-on: ubuntu-latest
@@ -76,7 +76,7 @@ jobs:
         run: 'echo These dont run because of no needs dependency'
 
   tests-needs:
-    name: Run tests
+    name: Test with needs dep 1 and 2
     needs: [ deploy-1, deploy-2 ]
     if: ${{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true' }}
     runs-on: ubuntu-latest
@@ -85,7 +85,7 @@ jobs:
         run: 'echo Tests ran!'
 
   tests-needs-fail-no-run:
-    name: Run tests
+    name: Test no always dep 1 and fail
     needs: [ deploy-1, deploy-fail ]
     if: ${{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true' }}
     runs-on: ubuntu-latest
@@ -94,7 +94,7 @@ jobs:
         run: 'echo Tests did not run because of no always()'
 
   tests-needs-fail:
-    name: Run tests
+    name: Test always dep 1 and fail
     needs: [ deploy-1, deploy-fail ]
     if: ${{ always() && (needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true') }}
     runs-on: ubuntu-latest
