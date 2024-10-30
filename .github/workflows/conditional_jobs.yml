@@ -29,7 +29,7 @@ jobs:
     needs: [ debug ]
     runs-on: ubuntu-latest
     outputs:
-      deploy-success: {{ steps.success-output.outputs.deploy-success }}
+      deploy-success: ${{ steps.success-output.outputs.deploy-success }}
     steps:
       - name: Start
         run: echo "Start"
@@ -43,7 +43,7 @@ jobs:
     needs: [ debug ]
     runs-on: ubuntu-latest
     outputs:
-      deploy-success: {{ steps.success-output.outputs.deploy-success }}
+      deploy-success: ${{ steps.success-output.outputs.deploy-success }}
     steps:
       - name: Start
         run: echo "Start"
@@ -55,7 +55,7 @@ jobs:
   test:
     name: Run tests
     # needs: [ deploy-1, deploy-2 ]
-    if: {{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true' }}
+    if: ${{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Tests ran
