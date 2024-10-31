@@ -39,7 +39,7 @@ jobs:
         run: 'echo "deploy-success=true" >> $GITHUB_OUTPUT'
 
   deploy-2:
-    name: Deply Two
+    name: Deploy Two
     needs: [ debug ]
     runs-on: ubuntu-latest
     outputs:
@@ -52,8 +52,23 @@ jobs:
         id: success-output
         run: 'echo "deploy-success=true" >> $GITHUB_OUTPUT'
 
+  deploy-skip:
+    name: Deploy skipped
+    needs: [ debug ]
+    if: ${{  needs.debug.outputs.truthy-value == 'false' }}
+    runs-on: ubuntu-latest
+    outputs:
+      deploy-success: ${{ steps.success-output.outputs.deploy-success }}
+    steps:
+      - name: Start
+        run: echo "Start"
+
+      - name: Finish
+        id: success-output
+        run: 'echo "deploy-success=true" >> $GITHUB_OUTPUT'
+
   deploy-fail:
-    name: Deply Fail
+    name: Deploy Fail
     needs: [ debug ]
     runs-on: ubuntu-latest
     outputs:
@@ -67,7 +82,7 @@ jobs:
         run: 'echo "deploy-success=true" >> $GITHUB_OUTPUT'
 
   tests-no-needs:
-    name: Test no needs statement dep 1 and 2
+    name: "Test: no needs, but needs output from deploy-1 + deploy-2"
     # needs: [ deploy-1, deploy-2 ]
     if: ${{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true' }}
     runs-on: ubuntu-latest
@@ -76,7 +91,7 @@ jobs:
         run: 'echo These dont run because of no needs dependency'
 
   tests-needs:
-    name: Test with needs dep 1 and 2
+    name: "Test: needs deploy-1 + deploy-2"
     needs: [ deploy-1, deploy-2 ]
     if: ${{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true' }}
     runs-on: ubuntu-latest
@@ -84,29 +99,47 @@ jobs:
       - name: Tests ran
         run: 'echo Tests ran!'
 
-  tests-needs-fail-no-run:
-    name: Test no always dep 1 and fail
+  tests-needs-no-always:
+    name: "Test: deploy-1 + deploy-fail"
     needs: [ deploy-1, deploy-fail ]
-    if: ${{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true' }}
+    if: ${{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-fail.outputs.deploy-success == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Tests ran
         run: 'echo Tests did not run because of no always'
 
   tests-needs-fail:
-    name: Test always dep 1 and fail
+    name: "Test: always + deploy-1 + deploy-fail"
     needs: [ deploy-1, deploy-fail ]
-    if: ${{ always() && (needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-2.outputs.deploy-success == 'true') }}
+    if: ${{ always() && (needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-fail.outputs.deploy-success == 'true') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tests ran
+        run: 'echo Tests ran despite failure because of always'
+        
+  tests-needs-skip:
+    name: "Test: deploy-1 + deploy-skip"
+    needs: [ deploy-1, deploy-skip ]
+    if: ${{ needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-skip.outputs.deploy-success == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tests ran
+        run: 'echo Tests did not run because of no always'
+
+  tests-needs-skip-no-always:
+    name: "Test: always + deploy-1 + deploy-skip"
+    needs: [ deploy-1, deploy-skip ]
+    if: ${{ always() && (needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-skip.outputs.deploy-success == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - name: Tests ran
         run: 'echo Tests ran despite failure because of always'
 
   tests-needs-fail-second-false:
-    name: Test always dep 1, fail, second false
+    name: "Test: always + deploy-1 + deploy-fail but needs.output OR failure"
     needs: [ deploy-1, deploy-fail ]
     if: ${{ always() && (needs.deploy-1.outputs.deploy-success == 'true' || needs.deploy-1.outputs.deploy-success == 'false') }}
     runs-on: ubuntu-latest
     steps:
       - name: Tests ran
-        run: 'echo Tests ran despite failure because of always'
+        run: 'echo Tests ran despite failure in needs.output OR because of always'
