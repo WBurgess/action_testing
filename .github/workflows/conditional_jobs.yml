@@ -156,7 +156,7 @@ jobs:
   tests-needs-job-result-with-bang-failure:
     name: "Test: looks at result == success, not looking at github outputs, added bang failure()"
     needs: [ deploy-1, deploy-skip ]
-    if: ${{ !falure() && (needs.deploy-1.result == 'success' || needs.deploy-skip.result == 'success') }}
+    if: ${{ !failure() && (needs.deploy-1.result == 'success' || needs.deploy-skip.result == 'success') }}
     runs-on: ubuntu-latest
     steps:
       - name: Tests ran
