@@ -153,20 +153,29 @@ jobs:
       - name: Tests ran
         run: 'echo Tests do not run because .result is only available in resuable workflows'
 
-  tests-needs-bang-failure:
-    name: "Test: !failure"
+  tests-needs-bang-failure-on-skip:
+    name: "Test: !failure on skip"
     needs: [ deploy-1, deploy-skip ]
     if: ${{ !failure() }}
     runs-on: ubuntu-latest
     steps:
       - name: Tests ran
-        run: 'echo Tests ???'
+        run: 'echo Tests run as a skip is not a failure'
+
+  tests-needs-bang-failure-on-fail:
+    name: "Test: !failure on fail"
+    needs: [ deploy-1, deploy-fail ]
+    if: ${{ !failure() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tests ran
+        run: 'echo Tests do not run as one of the dependencies failed'
 
   tests-needs-success:
-    name: "Test: success "
+    name: "Test: success on skip"
     needs: [ deploy-1, deploy-skip ]
     if: ${{ success() }}
     runs-on: ubuntu-latest
     steps:
       - name: Tests ran
-        run: 'echo Tests ???'
+        run: 'echo Tests do not run as one of the dependencies was skipped'
