@@ -161,8 +161,8 @@ jobs:
     steps:
       - name: Debug
         run: |
-          'echo deploy-1 result: ${{ needs.deploy-1.result }}'
-          'echo deploy-skip result: ${{ needs.deploy-skip.result }}'
+          'echo "deploy-1 result: ${{ needs.deploy-1.result }}"'
+          'echo "deploy-skip result: ${{ needs.deploy-skip.result }}"'
       - name: Tests ran
         run: 'echo Tests run!'
 
