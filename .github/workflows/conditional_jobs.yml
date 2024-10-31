@@ -153,6 +153,15 @@ jobs:
       - name: Tests ran
         run: 'echo Tests do not run because .result is only available in resuable workflows'
 
+  tests-needs-job-result-with-bang-failure:
+    name: "Test: looks at result == success, not looking at github outputs, added bang failure()"
+    needs: [ deploy-1, deploy-skip ]
+    if: ${{ !falure() && (needs.deploy-1.result == 'success' || needs.deploy-skip.result == 'success') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tests ran
+        run: 'echo Tests do not run because .result is only available in resuable workflows'
+
   tests-needs-bang-failure-on-skip:
     name: "Test: !failure on skip"
     needs: [ deploy-1, deploy-skip ]
@@ -160,7 +169,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Tests ran
-        run: 'echo Tests run as a skip is not a failure'
+        run: 'echo Tests run as a skip is not a failure. This also means this will run if both dependencies are skipped'
 
   tests-needs-bang-failure-on-fail:
     name: "Test: !failure on fail"
