@@ -43,7 +43,7 @@ jobs:
 
   pull_request_review_if_approved_or_dispatch_and_not_draft:
     name: Pass if approved OR dispatched AND not a draft
-    if: ${{ (github.event.review.state == 'approved' || github.event_name == 'workflow_dispatch') && github.event.pull_request.draft == false }}
+    if: ${{ (github.event.review.state == 'approved' && github.event.pull_request.draft == false) || github.event_name == 'workflow_dispatch')  }}
     runs-on: ubuntu-latest
     steps:
       - name: Success
