@@ -53,3 +53,11 @@ jobs:
       - name: Success
         run: echo Success...
 
+  pull_request_main_only_review_if_approved_or_dispatch_and_not_draft:
+    name: Pass if main branch AND approved AND not a draft OR dispatched
+    if: ${{ (github.event.pull_request.base.ref == 'main' && github.event.review.state == 'approved' && github.event.pull_request.draft == false) || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Success
+        run: echo Success...
+
