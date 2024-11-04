@@ -42,7 +42,7 @@ jobs:
         run: echo Success...
 
   pull_request_review_if_approved_or_dispatch_and_not_draft:
-    name: Pass is head ref is main and approved
+    name: Pass if approved OR dispatched AND not a draft
     if: ${{ (github.event.review.state == 'approved' || github.event_name == 'workflow_dispatch') && github.event.pull_request.draft == false }}
     runs-on: ubuntu-latest
     steps:
