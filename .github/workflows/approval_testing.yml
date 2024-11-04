@@ -19,6 +19,8 @@ jobs:
         run: 'echo ${{ github.event.pull_request.base.ref }}'
       - name: 'github.event_name'
         run: 'echo ${{ github.event_name}}'
+      - name: 'github.event.review.state'
+        run: 'echo ${{ github.event.review.state}}'
       - name: 'for conditional testing'
         id: output-truth
         run: 'echo "truthy-value=true" >> $GITHUB_OUTPUT'
