@@ -18,4 +18,4 @@ jobs:
 
   call_reusable_admin:
     uses: './.github/workflows/_reusable_input_testing.yml'
-    if: ${{ github.event.inputs.SERVICE == 'admin' }}
+    if: ${{ github.event.inputs.SERVICE == 'admin' || github.event.inputs.SERVICE == 'both' }}
