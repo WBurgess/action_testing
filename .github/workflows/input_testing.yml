@@ -1,0 +1,15 @@
+name: Test Input Flow to Reusable
+
+on:
+  workflow_dispatch:
+    inputs:
+      SERVICE:
+        required: true
+        description: "Which service to deploy (comma-separated: client,admin,both)"
+        type: string
+
+
+jobs:
+  call_reusable_admin:
+    uses: './.github/workflows/_reusable_input_testing.yml'
+    if: ${{ needs.set-outputs.outputs.service == 'admin' }}

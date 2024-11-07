@@ -1,0 +1,11 @@
+name: Reusable Input Testing
+
+on:
+  workflow_call:
+
+jobs:
+  deploy-service:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Deploy'
+        run: 'echo "DEPLOYING"'
