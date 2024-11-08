@@ -11,7 +11,7 @@ jobs:
   parse-inputs:
     runs-on: ubuntu-latest
     outputs:
-      deploy-matrix: ${{ steps.build-matrix.outputs.matrix }}
+      deploy-matrix: ${{ steps.build-matrix.outputs.deploy-matrix }}
     steps:
       - name: Build Matrix
         uses: actions/github-script@v7
@@ -31,6 +31,9 @@ jobs:
             core.setOutput('deploy-matrix', newClients);
         env:
           CLIENTS: ${{ github.event.inputs.CLIENTS }}
+
+      - name: DEBUG
+        run: 'echo "${{ fromJson(steps.build-matrix.outputs.deploy-matrix) }}"'
 
   deploy:
     runs-on: ubuntu-lates
