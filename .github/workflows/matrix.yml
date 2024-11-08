@@ -24,7 +24,7 @@ jobs:
 
             const newClients = JSON.stringify(clients.split(','));
             console.log(`NEW: ${newClients}`);
-            core.setOutput('newClients', build-matrix);
+            core.setOutput('deploy-matrix', newClients);
         env:
           CLIENTS: ${{ github.event.inputs.CLIENTS }}
 
