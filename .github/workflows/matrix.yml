@@ -61,7 +61,7 @@ jobs:
       - name: Output
         id: output
         run: |
-          echo "${{ matrix.environment }}=${{ steps.reload.outcome }}" >> $GITHUB_OUTPUT
+          echo "deploy-${{ matrix.environment }}=${{ steps.reload.outcome }}" >> $GITHUB_OUTPUT
 
   output:
     runs-on: ubuntu-latest
@@ -69,7 +69,12 @@ jobs:
     steps:
       - name: Output the Matrix
         run: |
+          echo "${{ needs.deploy.outputs[0] }}"
           echo "${{ needs.deploy.outputs.* }}"
+
+      - name: Output results
+        run: |
+          echo "${{ needs.deploy.result }}"
 
   deploy-input-will-fail:
     runs-on: ubuntu-latest
