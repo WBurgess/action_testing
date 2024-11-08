@@ -1,0 +1,33 @@
+name: Matrix Testing
+
+on:
+  workflow_dispatch:
+    inputs:
+      CLIENTS:
+        type: string
+        description: 'Comma separated list of client names'
+jobs:
+  parse-inputs:
+    runs-on: ubuntu-latest
+    outputs:
+      deploy-matrix: ${{ steps.build-matrix.outputs.matrix }}
+    steps:
+      - name: Build Matrix
+        id: build-matrix
+        run: |
+          CLIENT_NAMES_RAW=${{ github.event.inputs.CLIENTS }}
+          CLIENT_NAMES=(${CLIENT_NAMES_RAW//,/ })
+          
+          echo "$CLIENT_NAMES"
+          echo "$CLIENT_NAMES" >> $GITHUB_OUTPUT
+          
+  deploy:
+    runs-on: ubuntu-lates
+    needs: [ parse-inputs ]
+    strategy:
+      matrix:
+        environment: ${{ needs.parse-inputs.outputs.deploy-matrix }}
+    steps:
+      - name: Reloading the Matrix
+        run: |
+          echo "RELOADING: ${{ matrix.environment }}"
