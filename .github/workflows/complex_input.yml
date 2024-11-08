@@ -2,11 +2,16 @@ name: 'Complex input parsing'
 
 on:
   workflow_dispatch:
-		inputs:
-			ENVIRONMENTS: ''
-			CLIENT_NAMES: ''
+    inputs:
+      ENVIRONMENTS:
+        description: 'Comma separated list'
+        type: string
+      UAT_CLIENTS:
+        description: 'Comma separated list'
+        type: string
 
-parse-inputs:
+jobs:
+  parse-inputs:
     name: Parse Inputs
     runs-on: ubuntu-latest
     outputs:
