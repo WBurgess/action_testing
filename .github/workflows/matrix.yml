@@ -13,6 +13,7 @@ jobs:
     outputs:
       debug: ${{ steps.build-matrix.outputs.debug }}
       deploy-matrix: ${{ steps.build-matrix.outputs.deploy-matrix }}
+    continue-on-error: true
     steps:
       - name: Build Matrix
         uses: actions/github-script@v7
