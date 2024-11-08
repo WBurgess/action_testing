@@ -20,10 +20,12 @@ jobs:
           # result-encoding: json
           script: |
             const clients = process.env.CLIENTS;
-            console.log(`CLIENTS(${typeof clients}): ${JSON.stringify(clients)}`);
+            // goal: "[\"uat\",\"dev\",\"prod\"]"
+            console.log(`RAW: ${clients}`);
 
-            const newClients = `'${JSON.stringify(clients.split(','))}'`;
-            console.log(`NEW: ${newClients}`);
+            const newClients = `[${clients.split(',').map(c => '\"' + c + '\"')}]`
+
+            console.log(`PARSED: ${newClients}`);
             core.setOutput('deploy-matrix', newClients);
         env:
           CLIENTS: ${{ github.event.inputs.CLIENTS }}
@@ -34,8 +36,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # environment: ${{ fromJson(needs.parse-inputs.outputs.deploy-matrix) }}
-        environment: ${{ fromJson(github.event.inputs.CLIENTS) }}
+        environment: ${{ fromJson(needs.parse-inputs.outputs.deploy-matrix) }}
+        # environment: ${{ fromJson(github.event.inputs.CLIENTS) }}
     steps:
       - name: Reloading the Matrix
         run: |
