@@ -25,14 +25,14 @@ jobs:
             console.log(`RAW: ${clients}`);
 
             // Parse into cdk names
-            clients
+            const cdkClients = clients
               .replace("dev", "Dev")
               .replace("uat", "UAT")
               .replace("uatpr", "UAT-PR")
               .replace("prod", "Prod")
 
             // goal: ["uat","dev","prod"]
-            const newClients = `[${clients.split(',').map(c => '\"' + c + '\"')}]`
+            const newClients = `[${cdkClients.split(',').map(c => '\"' + c + '\"')}]`
 
             console.log(`PARSED: ${newClients}`);
             core.setOutput('debug', clients);
