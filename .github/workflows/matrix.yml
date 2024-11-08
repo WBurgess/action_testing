@@ -19,12 +19,14 @@ jobs:
         with:
           # result-encoding: json
           script: |
-            const clients = github.event.inputs.CLIENTS
+            const clients = process.env.CLIENTS;
             console.log(`CLIENTS(typeof clients): ${JSON.stringify(clients)}`);
 
             const newClients = JSON.stringify(clients.split(','));
             console.log(`NEW: ${newClients}`);
             core.setOutput('newClients', build-matrix);
+        env:
+          CLIENTS: ${{ github.event.inputs.CLIENTS }}
 
   deploy:
     runs-on: ubuntu-lates
