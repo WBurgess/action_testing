@@ -33,8 +33,10 @@ jobs:
 
       - name: DEBUG
         run: |
+          INPUT='${{ fromJson(needs.parse-inputs.outputs.deploy-matrix) }}'
           DEBUG='${{ fromJson(steps.build-matrix.outputs.deploy-matrix) }}'
-          echo $DEBUG
+          echo "INPUT: $INPUT"
+          echo "PARSED: $DEBUG"
 
   deploy:
     runs-on: ubuntu-lates
