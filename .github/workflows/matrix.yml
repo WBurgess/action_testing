@@ -24,7 +24,8 @@ jobs:
             console.log(`RAW: ${clients}`);
 
             // goal: "[\"uat\",\"dev\",\"prod\"]"
-            const newClients = `\"[${clients.split(',').map(c => '\\\"' + c + '\\\"')}]\"`
+                     "[\"uat\",\"dev\",\"prod\"]"
+            const newClients = `[${clients.split(',').map(c => '\\\"' + c + '\\\"')}]`
 
             console.log(`PARSED: ${newClients}`);
             core.setOutput('deploy-matrix', newClients);
