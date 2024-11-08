@@ -19,7 +19,7 @@ jobs:
           CLIENT_NAMES=(${CLIENT_NAMES_RAW//,/ })
           
           echo "$CLIENT_NAMES"
-          echo "$CLIENT_NAMES" >> $GITHUB_OUTPUT
+          echo "deploy-matrix=$CLIENT_NAMES" >> $GITHUB_OUTPUT
           
   deploy:
     runs-on: ubuntu-lates
