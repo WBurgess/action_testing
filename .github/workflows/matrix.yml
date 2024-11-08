@@ -20,10 +20,11 @@ jobs:
           # result-encoding: json
           script: |
             const clients = process.env.CLIENTS;
-            // goal: "[\"uat\",\"dev\",\"prod\"]"
+            
             console.log(`RAW: ${clients}`);
 
-            const newClients = `[${clients.split(',').map(c => '\"' + c + '\"')}]`
+            // goal: "[\"uat\",\"dev\",\"prod\"]"
+            const newClients = `\"[${clients.split(',').map(c => '\\\"' + c + '\\\"')}]\"`
 
             console.log(`PARSED: ${newClients}`);
             core.setOutput('deploy-matrix', newClients);
