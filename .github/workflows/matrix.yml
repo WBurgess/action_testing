@@ -24,8 +24,7 @@ jobs:
             console.log(`RAW: ${clients}`);
 
             // goal: "[\"uat\",\"dev\",\"prod\"]"
-                     "[\"uat\",\"dev\",\"prod\"]"
-            const newClients = `[${clients.split(',').map(c => '\\\"' + c + '\\\"')}]`
+            const newClients = `\"[${clients.split(',').map(c => '\\\"' + c + '\\\"')}]\"`
 
             console.log(`PARSED: ${newClients}`);
             core.setOutput('deploy-matrix', newClients);
@@ -33,7 +32,9 @@ jobs:
           CLIENTS: ${{ github.event.inputs.CLIENTS }}
 
       - name: DEBUG
-        run: 'echo "${{ fromJson(steps.build-matrix.outputs.deploy-matrix) }}"'
+        run: |
+          DEBUG='${{ fromJson(steps.build-matrix.outputs.deploy-matrix) }}'
+          echo $DEBUG
 
   deploy:
     runs-on: ubuntu-lates
