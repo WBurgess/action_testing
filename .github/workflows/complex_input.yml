@@ -1,0 +1,33 @@
+name: 'Complex input parsing'
+
+on:
+  workflow_dispatch:
+		inputs:
+			ENVIRONMENTS: ''
+			CLIENT_NAMES: ''
+
+parse-inputs:
+    name: Parse Inputs
+    runs-on: ubuntu-latest
+    outputs:
+      deploy-command: ${{ steps.set-outputs.outputs.deploy-command }}
+    steps:
+      - name: Set outputs
+        id: set-outputs
+        run: |
+          CONTAINS_PROD="${{ contains(github.event.inputs.ENVIRONMENTS, 'prod') }}"
+          CONTAINS_UAT="${{ contains(github.event.inputs.ENVIRONMENTS, 'uat') }}"
+          CLIENT_NAMES=(${${{ github.event.inputs.UAT_CLIENTS }}//,/ })
+
+          if [ "$CONTAINS_PROD" == "true" && "$CONTAINS_UAT" == "false"]; then
+            echo "deploy-command=prod/*" >> $GITHUB_OUTPUT
+          fi
+          if [ "$CONTAINS_UAT" == "true" && "$CONTAINS_PROD" == "false"]; then
+            echo "deploy-command=uat/*" >> $GITHUB_OUTPUT
+          fi
+          if [ "$CONTAINS_PROD" == "true" && "$CONTAINS_UAT" == "true"]; then
+            echo "deploy-command=*/*" >> $GITHUB_OUTPUT
+          fi
+          if [ "$CONTAINS_UAT" == "true" && "$CONTAINS_PROD" == "false" && ]; then
+            echo "deploy-command=*/*" >> $GITHUB_OUTPUT
+          fi
