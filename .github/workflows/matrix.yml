@@ -6,6 +6,7 @@ on:
       CLIENTS:
         type: string
         description: 'Comma separated list of client names'
+
 jobs:
   parse-inputs:
     runs-on: ubuntu-latest
@@ -16,15 +17,14 @@ jobs:
         uses: actions/github-script@v7
         id: build-matrix
         with:
+          # result-encoding: json
           script: |
-            const clients = process.env.CLIENTS;
+            const clients = github.event.inputs.CLIENTS
             console.log(`CLIENTS(typeof clients): ${JSON.stringify(clients)}`);
 
             const newClients = JSON.stringify(clients.split(','));
             console.log(`NEW: ${newClients}`);
-            core.setOutput('newClients', json);
-        env:
-          CLIENTS: ${{ github.event.inputs.CLIENTS }}
+            core.setOutput('newClients', build-matrix);
 
   deploy:
     runs-on: ubuntu-lates
