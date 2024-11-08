@@ -33,7 +33,7 @@ jobs:
 
       - name: DEBUG
         run: |
-          INPUT='${{ fromJson(needs.parse-inputs.outputs.deploy-matrix) }}'
+          INPUT='${{ fromJson(github.event.inputs.CLIENTS) }}'
           DEBUG='${{ fromJson(steps.build-matrix.outputs.deploy-matrix) }}'
           echo "INPUT: $INPUT"
           echo "PARSED: $DEBUG"
