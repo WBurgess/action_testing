@@ -40,11 +40,6 @@ jobs:
           DEBUG='${{ fromJson(steps.build-matrix.outputs.deploy-matrix) }}'
           echo "PARSED: $DEBUG"
 
-      - name: DEBUG INPUT
-        run: |
-          INPUT='${{ fromJson(github.event.inputs.CLIENTS) }}'
-          echo "INPUT: $INPUT"
-
   deploy:
     runs-on: ubuntu-latest
     needs: [ parse-inputs ]
