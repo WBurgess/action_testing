@@ -13,20 +13,17 @@ jobs:
       deploy-matrix: ${{ steps.build-matrix.outputs.matrix }}
     steps:
       - name: Build Matrix
+        uses: actions/github-script@v7
         id: build-matrix
-        # run: |
-        #   CLIENT_NAMES_RAW=${{ github.event.inputs.CLIENTS }}
-          
-          
-        #   # echo "deploy-matrix=$CLIENT_NAMES" | tee -a $GITHUB_OUTPUT
+        with:
+          script: |
+            const clients = ${{ github.event.inputs.CLIENTS }}
+            console.log(`CLIENTS(typeof clients): ${JSON.stringify(clients)}`);
 
-        #   set -eux
-        #   # CLIENT_NAMES=$(echo "$CLIENT_NAMES_RAW" | jq -R 'split(",")')
-        #   CLIENT_NAMES=$(echo "$CLIENT_NAMES_RAW" | jq -c '. | map(split(",")[0]) | unique'
-        #   echo "deploy-matrix=$CLIENT_NAMES" >> $GITHUB_OUTPUT
-        run: |
-          echo '${{ github.event.inputs.CLIENTS }}' | jq -r 'to_entries[] | "\(.key)=\(.value)"' | xargs -I '{}' echo "{}" >> "$GITHUB_OUTPUT"
-          echo $(cat $GITHUB_OUTPUT)
+            const newClients = JSON.stringify(clients.split(','));
+            console.log(`NEW: ${newClients}`);
+            core.setOutput('newClients', json);
+
   deploy:
     runs-on: ubuntu-lates
     needs: [ parse-inputs ]
