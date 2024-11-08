@@ -54,10 +54,24 @@ jobs:
         environment: ${{ fromJson(needs.parse-inputs.outputs.deploy-matrix) }}
     steps:
       - name: Reloading the Matrix
+        id: reload
         run: |
           echo "RELOADING: ${{ matrix.environment }}"
 
-  deploy-input:
+      - name: Output
+        id: output
+        run: |
+          echo "${{ matrix.environment }}=${{ steps.reload.outcome }}" >> $GITHUB_OUTPUT
+
+  output:
+    runs-on: ubuntu-latest
+    needs: [ deploy ]
+    steps:
+      - name: Output the Matrix
+        run: |
+          echo "${{ needs.deploy.outputs.* }}"
+
+  deploy-input-will-fail:
     runs-on: ubuntu-latest
     needs: [ parse-inputs ]
     strategy:
