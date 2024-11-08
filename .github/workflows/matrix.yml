@@ -25,7 +25,7 @@ jobs:
             console.log(`RAW: ${clients}`);
 
             // goal: "[\"uat\",\"dev\",\"prod\"]"
-            # const newClients = `\"[${clients.split(',').map(c => '\\\"' + c + '\\\"')}]\"`
+            const newClients = `\"[${clients.split(',').map(c => '\\\"' + c + '\\\"')}]\"`
 
             console.log(`PARSED: ${newClients}`);
             core.setOutput('debug', clients);
