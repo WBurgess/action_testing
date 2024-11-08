@@ -22,11 +22,16 @@ jobs:
           # result-encoding: json
           script: |
             const clients = process.env.CLIENTS;
-            
             console.log(`RAW: ${clients}`);
 
+            // Parse into cdk names
+            const newClients = clients
+              .replace("dev", "Dev")
+              .replace("uat", "UAT")
+              .replace("uatpr", "UAT-PR")
+              .replace("prod", "Prod")
+
             // goal: ["uat","dev","prod"]
-            // const newClients = `\"[${clients.split(',').map(c => '\"' + c + '\"')}]\"`
             const newClients = `[${clients.split(',').map(c => '\"' + c + '\"')}]`
 
             console.log(`PARSED: ${newClients}`);
