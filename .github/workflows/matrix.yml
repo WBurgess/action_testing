@@ -24,7 +24,9 @@ jobs:
         #   # CLIENT_NAMES=$(echo "$CLIENT_NAMES_RAW" | jq -R 'split(",")')
         #   CLIENT_NAMES=$(echo "$CLIENT_NAMES_RAW" | jq -c '. | map(split(",")[0]) | unique'
         #   echo "deploy-matrix=$CLIENT_NAMES" >> $GITHUB_OUTPUT
-        run: echo '${{ github.event.inputs.CLIENTS }}' | jq -r 'to_entries[] | "\(.key)=\(.value)"' | xargs -I '{}' echo "{}" >> "$GITHUB_OUTPUT"
+        run: |
+          echo '${{ github.event.inputs.CLIENTS }}' | jq -r 'to_entries[] | "\(.key)=\(.value)"' | xargs -I '{}' echo "{}" >> "$GITHUB_OUTPUT"
+          echo $(cat $GITHUB_OUTPUT)
   deploy:
     runs-on: ubuntu-lates
     needs: [ parse-inputs ]
