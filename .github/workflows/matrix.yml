@@ -14,16 +14,17 @@ jobs:
     steps:
       - name: Build Matrix
         id: build-matrix
-        run: |
-          CLIENT_NAMES_RAW=${{ github.event.inputs.CLIENTS }}
+        # run: |
+        #   CLIENT_NAMES_RAW=${{ github.event.inputs.CLIENTS }}
           
           
-          # echo "deploy-matrix=$CLIENT_NAMES" | tee -a $GITHUB_OUTPUT
+        #   # echo "deploy-matrix=$CLIENT_NAMES" | tee -a $GITHUB_OUTPUT
 
-          set -eux
-          CLIENT_NAMES=$(echo "$CLIENT_NAMES_RAW" | jq -R 'split(",")')
-          echo "deploy-matrix=$CLIENT_NAMES" >> $GITHUB_OUTPUT
-          
+        #   set -eux
+        #   # CLIENT_NAMES=$(echo "$CLIENT_NAMES_RAW" | jq -R 'split(",")')
+        #   CLIENT_NAMES=$(echo "$CLIENT_NAMES_RAW" | jq -c '. | map(split(",")[0]) | unique'
+        #   echo "deploy-matrix=$CLIENT_NAMES" >> $GITHUB_OUTPUT
+        run: echo '${{ github.event.inputs.CLIENTS }}' | jq -r 'to_entries[] | "\(.key)=\(.value)"' | xargs -I '{}' echo "{}" >> "$GITHUB_OUTPUT"
   deploy:
     runs-on: ubuntu-lates
     needs: [ parse-inputs ]
