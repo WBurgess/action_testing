@@ -34,7 +34,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: ${{ fromJson(needs.parse-inputs.outputs.deploy-matrix) }}
+        # environment: ${{ fromJson(needs.parse-inputs.outputs.deploy-matrix) }}
+        environment: ${{ fromJson(github.event.inputs.CLIENTS) }}
     steps:
       - name: Reloading the Matrix
         run: |
