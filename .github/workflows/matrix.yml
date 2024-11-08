@@ -11,6 +11,7 @@ jobs:
   parse-inputs:
     runs-on: ubuntu-latest
     outputs:
+      debug: ${{ steps.build-matrix.outputs.debug }}
       deploy-matrix: ${{ steps.build-matrix.outputs.deploy-matrix }}
     steps:
       - name: Build Matrix
@@ -24,12 +25,18 @@ jobs:
             console.log(`RAW: ${clients}`);
 
             // goal: "[\"uat\",\"dev\",\"prod\"]"
-            const newClients = `\"[${clients.split(',').map(c => '\\\"' + c + '\\\"')}]\"`
+            # const newClients = `\"[${clients.split(',').map(c => '\\\"' + c + '\\\"')}]\"`
 
             console.log(`PARSED: ${newClients}`);
+            core.setOutput('debug', clients);
             core.setOutput('deploy-matrix', newClients);
         env:
           CLIENTS: ${{ github.event.inputs.CLIENTS }}
+
+      - name: DEBUG RAW
+        run: |
+          DEBUG='${{ fromJson(steps.build-matrix.outputs.debug) }}'
+          echo "RAW: $DEBUG"
 
       - name: DEBUG PARSED
         run: |
