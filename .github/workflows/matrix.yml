@@ -21,7 +21,7 @@ jobs:
           # echo "$CLIENT_NAMES_RAW"
           # echo "deploy-matrix=$CLIENT_NAMES" >> $GITHUB_OUTPUT
           CLIENT_NAMES=$(echo "$CLIENT_NAMES_RAW" | jq -R 'split(",")')
-          echo "deploy-matrix=$CLIENT_NAMES" >> $GITHUB_OUTPUT
+          echo "deploy-matrix=$CLIENT_NAMES" | tee -a $GITHUB_OUTPUT
           
   deploy:
     runs-on: ubuntu-lates
