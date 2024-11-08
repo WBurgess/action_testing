@@ -35,11 +35,6 @@ jobs:
         env:
           CLIENTS: ${{ github.event.inputs.CLIENTS }}
 
-      - name: DEBUG RAW
-        run: |
-          DEBUG='${{ fromJson(steps.build-matrix.outputs.debug) }}'
-          echo "RAW: $DEBUG"
-
       - name: DEBUG PARSED
         run: |
           DEBUG='${{ fromJson(steps.build-matrix.outputs.deploy-matrix) }}'
