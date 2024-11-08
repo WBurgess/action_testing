@@ -25,7 +25,7 @@ jobs:
             console.log(`RAW: ${clients}`);
 
             // Parse into cdk names
-            const newClients = clients
+            clients
               .replace("dev", "Dev")
               .replace("uat", "UAT")
               .replace("uatpr", "UAT-PR")
