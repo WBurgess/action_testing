@@ -26,7 +26,7 @@ jobs:
     needs: [ parse-inputs ]
     strategy:
       matrix:
-        environment: ${{ needs.parse-inputs.outputs.deploy-matrix }}
+        environment: ${{ fromJson(needs.parse-inputs.outputs.deploy-matrix) }}
     steps:
       - name: Reloading the Matrix
         run: |
