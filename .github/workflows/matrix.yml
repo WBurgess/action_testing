@@ -6,12 +6,14 @@ on:
       CLIENTS:
         type: string
         description: 'Comma separated list of client names'
+      ENVIRONMENTS:
+        type: string
+        description: 'Comma separated list of environment names'
 
 jobs:
   parse-inputs:
     runs-on: ubuntu-latest
     outputs:
-      debug: ${{ steps.build-matrix.outputs.debug }}
       deploy-matrix: ${{ steps.build-matrix.outputs.deploy-matrix }}
     continue-on-error: true
     steps:
@@ -26,7 +28,6 @@ jobs:
 
             // Parse into cdk names
             const cdkClients = clients
-              .replace("dev", "Dev")
               .replace("uat", "UAT")
               .replace("uatpr", "UAT-PR")
               .replace("prod", "Prod")
@@ -35,7 +36,47 @@ jobs:
             const newClients = `[${cdkClients.split(',').map(c => '\"' + c + '\"')}]`
 
             console.log(`PARSED: ${newClients}`);
-            core.setOutput('debug', clients);
+            core.setOutput('deploy-matrix', newClients);
+        env:
+          CLIENTS: ${{ github.event.inputs.CLIENTS }}
+
+      - name: DEBUG PARSED
+        run: |
+          DEBUG='${{ fromJson(steps.build-matrix.outputs.deploy-matrix) }}'
+          echo "PARSED: $DEBUG"
+
+  parse-inputs-double:
+    runs-on: ubuntu-latest
+    outputs:
+      deploy-matrix: ${{ steps.build-matrix.outputs.deploy-matrix }}
+      last-matrix-value: ${{ steps.build-matrix.outputs.last-matrix-value }}
+    continue-on-error: true
+    steps:
+      - name: Build Matrix
+        uses: actions/github-script@v7
+        id: build-matrix
+        with:
+          # result-encoding: json
+          script: |
+            const clients = process.env.CLIENTS;
+            console.log(`RAW: ${clients}`);
+
+            // Parse into cdk commands
+            const clientCommands = clients
+              .replace("uat", "uat/*")
+              .replace("prod", "prod/*")
+              .split(',')
+
+            const envCommands = isArray(environments)
+              ? environments.split(',').map(env => `uat/clientapi-${env}`)
+              
+            const commands = clientCommands.concat(envCommands)
+            const commands = `[${commands.map(c => '\"' + c + '\"')}]`
+
+            // goal: ["uat","dev","prod"]
+            const newClients = `[${cdkClients.split(',').map(c => '\"' + c + '\"')}]`
+
+            console.log(`PARSED: ${newClients}`);
             core.setOutput('deploy-matrix', newClients);
         env:
           CLIENTS: ${{ github.event.inputs.CLIENTS }}
@@ -61,7 +102,9 @@ jobs:
       - name: Output
         id: output
         run: |
-          echo "deploy-${{ matrix.environment }}=${{ steps.reload.outcome }}" >> $GITHUB_OUTPUT
+          echo "${{ matrix.environment }}=${{ steps.reload.outcome }}" >> output.txt
+
+      - name: 
 
   output:
     runs-on: ubuntu-latest
@@ -69,10 +112,9 @@ jobs:
     steps:
       - name: Output the Matrix
         run: |
-          echo "${{ needs.deploy.outputs[0] }}"
-          echo "${{ needs.deploy.outputs.* }}"
+          echo "${{ needs.deploy.outputs }}"
 
-      - name: Output results
+      - name: Output results (always shows success)
         run: |
           echo "${{ needs.deploy.result }}"
 
