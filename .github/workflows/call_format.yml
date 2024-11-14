@@ -18,5 +18,9 @@ jobs:
   test:
     uses: ./.github/workflows/format.yml
     with:
-      ENVIRONMENTS: 'env1,env2,env3'
+      ENVIRONMENTS: 'uat'
+  test2:
+    uses: ./.github/workflows/format.yml
+    with:
+      ENVIRONMENTS: 'uat,prod'
         
