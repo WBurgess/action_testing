@@ -18,8 +18,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Call things
-        uses: './.github/workflows/format.yml'
+      - uses: actions/checkout@v4
+      - uses: './.github/workflows/format.yml'
         with:
           ENVIRONMENTS: 'env1,env2,env3'
         
