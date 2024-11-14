@@ -17,7 +17,7 @@ jobs:
       - name: Output Something
         id: output
         run: |
-          echo "docker_image_uri=AWESOME" >> $GITHUB_OUTPUT
+          echo "docker_image_uri=''" >> $GITHUB_OUTPUT
 
       - name: Check Format
         run: 'echo "DOCKER IMAGE: $DOCKER_IMAGE"'
