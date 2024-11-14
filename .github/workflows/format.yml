@@ -6,6 +6,9 @@ on:
         RUN_OUTPUT:
           description: 'Should run output?'
           type: boolean
+        ALT_DOCKER_TAG:
+          description: 'New docker tag'
+          type: string
 
 jobs:
   debug:
@@ -20,4 +23,4 @@ jobs:
       - name: Check Format
         run: 'echo "DOCKER IMAGE: $DOCKER_IMAGE"'
         env:
-          DOCKER_IMAGE: ${{ steps.output.outputs.docker_image_uri || format('clientapi:{0}', 'DEFAULT') }}
+          DOCKER_IMAGE: ${{ steps.output.outputs.docker_image_uri || format('clientapi:{0}', inputs.ALT_DOCKER_TAG) }}
