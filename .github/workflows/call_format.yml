@@ -1,0 +1,25 @@
+name: Calling Format reusable
+
+on:
+  workflow_dispatch:
+    inputs:
+      RUN_OUTPUT:
+        description: 'Should run output?'
+        type: boolean
+      ALT_DOCKER_TAG:
+        description: 'New docker tag'
+        type: string
+      ENVIRONMENTS:
+        description: 'Envs'
+        default: 'env1,env2'
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call things
+        uses: './.github/workflows/format.yml'
+        with:
+          ENVIRONMENTS: 'env1,env2,env3'
+        

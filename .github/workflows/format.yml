@@ -1,14 +1,18 @@
-name: Format Testing
+name: Format Testing and Github Script Testing
 
 on:
-    workflow_dispatch:
-      inputs:
-        RUN_OUTPUT:
-          description: 'Should run output?'
-          type: boolean
-        ALT_DOCKER_TAG:
-          description: 'New docker tag'
-          type: string
+  workflow_call:
+    inputs:
+      RUN_OUTPUT:
+        description: 'Should run output?'
+        type: boolean
+      ALT_DOCKER_TAG:
+        description: 'New docker tag'
+        type: string
+      ENVIRONMENTS:
+        description: 'Envs'
+        default: 'env1,env2'
+        type: string
 
 jobs:
   debug:
@@ -24,3 +28,27 @@ jobs:
         run: 'echo "DOCKER IMAGE: $DOCKER_IMAGE"'
         env:
           DOCKER_IMAGE: ${{ steps.output.outputs.docker_image_uri || format('clientapi:{0}', inputs.ALT_DOCKER_TAG) }}
+
+  parse-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Matrix
+        uses: actions/github-script@v7
+        id: build-matrix
+        env:
+          INPUT_ENVIRONMENTS: ${{ inputs.ENVIRONMENTS }}
+        with:
+          script: |
+            const envs = core.getInput('environments');
+            const DEPLOYABLE_ENVS = [ 'uat', 'prod' ];
+
+            console.log(`Inputs:\n  Envs: ${envs}`);
+
+            // Map into CDK commands
+            const envCommands = envs
+              ? envs.split(',')
+                    .filter(env => DEPLOYABLE_ENVS.includes(env))
+                    .map(env => `${env}/*`)
+              : undefined
+
+            console.log(`PARSED: ${envCommands}`);
