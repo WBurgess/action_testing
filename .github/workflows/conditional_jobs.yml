@@ -23,6 +23,18 @@ jobs:
         id: output-truth
         run: 'echo "truthy-value=true" >> $GITHUB_OUTPUT'
 
+  hasfiles:
+    name: Hash Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Put file
+        run: |
+          mkdir hashTest
+          touch hashTest/results.txt
+      
+      - name: Hash test
+        if: ${{ hashFiles('hashTest/result**') != '' }}
+        run: echo "SUCCESS"
 
   deploy-1:
     name: Deploy One
