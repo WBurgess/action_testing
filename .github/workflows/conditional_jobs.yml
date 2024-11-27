@@ -32,9 +32,13 @@ jobs:
           mkdir hashTest
           touch hashTest/results.txt
       
-      - name: Hash test
+      - name: Hash test - success
         if: ${{ hashFiles('hashTest/result**') != '' }}
         run: echo "SUCCESS"
+
+      - name: Hash test - fail
+        if: ${{ hashFiles('hashTest/fail') != '' }}
+        run: echo "SHOULDNT SEE ME"
 
   deploy-1:
     name: Deploy One
