@@ -30,10 +30,14 @@ jobs:
       - name: Put file
         run: |
           mkdir hashTest
-          touch hashTest/results.txt
+          touch hashTest/result/results.txt
       
       - name: Hash test - success
         if: ${{ hashFiles('hashTest/result**') != '' }}
+        run: echo "SUCCESS"
+
+      - name: Hash test - success
+        if: ${{ hashFiles('hashTest/**') != '' }}
         run: echo "SUCCESS"
 
       - name: Hash test - fail
