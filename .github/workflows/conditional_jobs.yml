@@ -30,6 +30,7 @@ jobs:
       - name: Put file
         run: |
           mkdir hashTest
+          mkdir hashTest/result
           touch hashTest/result/results.txt
       
       - name: Hash test - success
