@@ -48,11 +48,17 @@ jobs:
     steps:
       - name: Determine if required checks passed
         uses: actions/github-script@v7
+        env:
+          SETUP_OUTPUTS: ${{ needs.setup.outputs }}
+          INPUT_SETUP_OUTPUTS: ${{ needs.setup.outputs }}
+          INPUT_IS_RELEASE: ${{ github.event_name == 'release' }}
         with:
           script: |
             // Determine what should pass
-            const setupOutputs = ${{ needs.setup.outputs }}
-            console.log(`OUTPUTS: ${JSON.stringify(setupOutputs,null,2)}`)
+            const setupOutputs = process.env.SETUP_OUTPUTS
+            const setupOutputs2 = process.env.INPUT_SETUP_OUTPUTS
+            console.log(`OUTPUTS: ${JSON.stringify(setupOutputs,null,2)}\n`)
+            console.log(`OUTPUTS 2: ${JSON.stringify(setupOutputs2,null,2)}`)
 
             // Determine if those things passed, ignore the others
             
