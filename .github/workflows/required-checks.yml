@@ -52,7 +52,7 @@ jobs:
           script: |
             // Determine what should pass
             const setupOutputs = ${{ needs.setup.outputs }}
-            console.log(`OUTPUTS: ${setupOutputs}`)
+            console.log(`OUTPUTS: ${JSON.stringify(setupOutputs,null,2)}`)
 
             // Determine if those things passed, ignore the others
             
