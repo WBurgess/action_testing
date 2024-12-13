@@ -56,6 +56,6 @@ jobs:
           NEEDS: ${{ toJson(needs) }}
         with:
           script: |
-            console.log(`OUTPUTS: ${JSON.stringify(process.env.needs,null,2)}`)
+            console.log(`OUTPUTS: ${JSON.stringify(process.env.NEEDS,null,2)}`)
 
             // Determine if those things passed, ignore the others
