@@ -52,12 +52,12 @@ jobs:
         uses: actions/github-script@v7
         env:
           API1_CHANGED: ${{ needs.setup.outputs.api1-changed }}
-          INPUT_API1_CHANGED: ${{ needs.setup.outputs.api1-changed }}
+          API2_CHANGED: ${{ needs.setup.outputs.api2-changed }}
         with:
           script: |
             // Determine what should pass
             const setupOutputs = process.env.API1_CHANGED
-            const setupOutputs2 = process.env.INPUT_API1_CHANGED
+            const setupOutputs2 = process.env.API2_CHANGED
             console.log(`OUTPUTS: ${JSON.stringify(setupOutputs,null,2)}\n`)
             console.log(`OUTPUTS 2: ${JSON.stringify(setupOutputs2,null,2)}`)
 
