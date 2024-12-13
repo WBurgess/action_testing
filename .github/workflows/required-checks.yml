@@ -57,5 +57,6 @@ jobs:
         with:
           script: |
             console.log(`OUTPUTS: ${JSON.stringify(process.env.NEEDS,null,2)}`)
+            console.log(`OUTPUTS: ${process.env.NEEDS}`)
 
             // Determine if those things passed, ignore the others
