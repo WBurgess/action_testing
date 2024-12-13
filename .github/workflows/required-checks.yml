@@ -53,7 +53,7 @@ jobs:
         env:
           API1_CHANGED: ${{ needs.setup.outputs.api1-changed }}
           API2_CHANGED: ${{ needs.setup.outputs.api2-changed }}
-          NEEDS: ${{ fromJson(needs) }}
+          NEEDS: ${{ toJson(needs) }}
         with:
           script: |
             console.log(`OUTPUTS: ${JSON.stringify(process.env.needs,null,2)}`)
