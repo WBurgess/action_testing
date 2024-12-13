@@ -4,8 +4,8 @@ on:
   pull_request:
 
 jobs:
-  setup:
-    name: Setup
+  ci-check:
+    name: CI Check
     runs-on: ubuntu-latest
     outputs:
       api1-changed: ${{ steps.changed-files.outputs.api1_any_changed}}
