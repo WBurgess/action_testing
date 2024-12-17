@@ -1,0 +1,7 @@
+name: Nested Composite
+description: API-1 Tests
+runs:
+  using: "composite"
+  steps:
+    - name: Configure AWS credentials
+      run: echo "API1 Testing"
