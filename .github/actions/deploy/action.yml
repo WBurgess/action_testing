@@ -1,0 +1,7 @@
+name: Composite action
+description: API-1 Tests
+runs:
+  using: "composite"
+  steps:
+    - name: Deploy
+      run: echo "Deploy stuff"

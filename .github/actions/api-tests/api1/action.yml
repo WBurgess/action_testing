@@ -3,5 +3,5 @@ description: API-1 Tests
 runs:
   using: "composite"
   steps:
-    - name: Configure AWS credentials
+    - name: API1 Testing
       run: echo "API1 Testing"
