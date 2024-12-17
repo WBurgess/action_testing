@@ -18,4 +18,4 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
-      - uses: ./.github/actions/api-tests/api
+      - uses: ./.github/actions/api-tests/api1
