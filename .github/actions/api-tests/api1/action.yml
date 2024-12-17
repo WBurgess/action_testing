@@ -2,6 +2,7 @@ name: Nested Composite
 description: API-1 Tests
 runs:
   using: "composite"
+  shell: bash
   steps:
     - name: API1 Testing
       run: echo "API1 Testing"

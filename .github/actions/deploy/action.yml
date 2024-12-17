@@ -2,6 +2,7 @@ name: Composite action
 description: API-1 Tests
 runs:
   using: "composite"
+  shell: bash
   steps:
     - name: Deploy
       run: echo "Deploy stuff"
