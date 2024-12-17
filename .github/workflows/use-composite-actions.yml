@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/deploy
+      - uses: ./.github/actions/deploy@main
 
   run-nested-composite:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/api-tests/api
+      - uses: ./.github/actions/api-tests/api@main
