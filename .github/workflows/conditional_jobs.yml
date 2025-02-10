@@ -15,7 +15,6 @@ jobs:
   debug:
     name: Debug
     runs-on: ubuntu-latest
-    if: ${{ !inputs.debug-test }}
     outputs:
       truthy-value: ${{ steps.output-truth.outputs.truthy-value }}
     steps:
@@ -28,6 +27,8 @@ jobs:
       - name: 'for conditional testing'
         id: output-truth
         run: 'echo "truthy-value=true" >> $GITHUB_OUTPUT'
+      - name: 'what does null input look like when triggered by pull_request_review'
+        run: 'echo "${{ inputs.debug-test }}"'
 
   hasfiles:
     name: Hash Files
