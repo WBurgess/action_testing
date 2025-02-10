@@ -5,11 +5,17 @@ on:
     types: [ submitted ]
 
   workflow_dispatch:
+    inputs:
+      debug-test:
+        type: string
+        required: false
+        default: 'uams'
 
 jobs:
   debug:
     name: Debug
     runs-on: ubuntu-latest
+    if: ${{ !inputs.debug-test }}
     outputs:
       truthy-value: ${{ steps.output-truth.outputs.truthy-value }}
     steps:
