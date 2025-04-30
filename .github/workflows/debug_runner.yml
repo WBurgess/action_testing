@@ -7,8 +7,12 @@ jobs:
   debug:
     name: Debug
     runs-on: ubuntu-latest
-    outputs:
-      truthy-value: ${{ steps.output-truth.outputs.truthy-value }}
     steps:
       - name: 'pwd'
         run: 'pwd'
+      - name: 'github.ref'
+        run: echo "${{ github.ref }}"
+      - name: 'github.sha'
+        run: echo "${{ github.sha }}"
+      - name: 'github.ref_name'
+        run: echo "${{ github.ref_name }}"

@@ -1,0 +1,12 @@
+{ 
+    "name": "client-review-tool",
+    "version": "1.0.0",
+    "description": "",
+    "engines": {
+    "node": "20.x"
+    },
+    "packageManager": "yarn@1.22.22",
+    "dependencies": {
+        "react": "^18.2.0"
+    }
+}
