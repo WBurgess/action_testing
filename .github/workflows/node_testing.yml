@@ -1,0 +1,27 @@
+name: Debug Runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  node:
+    name: Debug Node
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+          working-directory: ./node1
+    steps:
+        - name: Enable Corepack
+          run: corepack enable
+
+        - name: Setup Node.js environment
+          uses: actions/setup-node@v4
+          with:
+           node-version: '20'
+           cache: 'yarn'
+
+        - name: install dependencies
+          run: yarn install --immutable
+
+        - name: alias
+          run: npx ts-node script.ts
