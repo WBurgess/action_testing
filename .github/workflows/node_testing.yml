@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
         run:
-          working-directory: ./node1
+          working-directory: node1
     steps:
         - name: Enable Corepack
           run: corepack enable
