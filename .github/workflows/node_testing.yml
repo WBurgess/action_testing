@@ -18,9 +18,7 @@ jobs:
            cache: 'yarn'
 
         - name: install dependencies
-          working-directory: node1
           run: yarn install --immutable
 
         - name: alias
-          working-directory: node1
-          run: npx ts-node script.ts
+          run: npx ts-node node1/script.ts
