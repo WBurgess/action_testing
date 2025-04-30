@@ -1,4 +1,4 @@
-name: Debug Runner
+name: Node Debug Runner
 
 on:
   workflow_dispatch:
