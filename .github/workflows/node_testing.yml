@@ -20,4 +20,4 @@ jobs:
           run: yarn install --immutable
 
         - name: alias
-          run: npx ts-node script.ts
+          run: npx ts-node node1/script.ts

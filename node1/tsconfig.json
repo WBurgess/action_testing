@@ -1,0 +1,43 @@
+{
+  "ts-node": {
+    // these options are overrides used only by ts-node
+    // same as the --compilerOptions flag and the TS_NODE_COMPILER_OPTIONS environment variable
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
+  "compilerOptions": {
+    "allowJs": true,
+    "jsx": "preserve",
+    "target": "es2015",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "skipLibCheck": true,
+    "noUncheckedIndexedAccess": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "types": [
+      "@testing-library/jest-dom",
+      "@types/jest",
+      "@types/node",
+      "@types/react"
+    ],
+    "paths": {},
+    "baseUrl": "src"
+  },
+  "exclude": [
+    "node_modules",
+    "storybook-static",
+    "cypress.config.ts",
+    "cypress",
+    "scripts/env-sync"
+  ],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+}
