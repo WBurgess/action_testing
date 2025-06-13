@@ -2,6 +2,11 @@ name: Debug Runner
 
 on:
   workflow_dispatch:
+    inputs:
+      image_tag:
+        type: string
+        description: Image tag
+        required: false
 
 jobs:
   debug:
@@ -16,3 +21,5 @@ jobs:
         run: echo "${{ github.sha }}"
       - name: 'github.ref_name'
         run: echo "${{ github.ref_name }}"
+      - name: 'Interp input string'
+        run: echo "UAT-${{ inputs.image_tag }}"
