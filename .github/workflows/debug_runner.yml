@@ -30,13 +30,11 @@ jobs:
     steps:
       - name: 'test'
         run: |
-          TAG_NAME=${{ github.event.inputs.image_tag || github.ref }}
-          if [[ "${TAG_NAME}" == refs/tags/* || "${TAG_NAME}" =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+          TAG_NAME=${{ github.event.inputs.image_tag || github.sha }}
+          if [[ "${TAG_NAME}" == refs/tags/* || "${TAG_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             IMAGE_TAG="PROD-${GITHUB_SHA}"
           else
             # Use the commit hash for non-release deployments when triggered by a workflow dispatch with branch
-            IMAGE_TAG=$(echo $GITHUB_SHA)
+            IMAGE_TAG="UAT-${GITHUB_SHA}"
           fi
           echo "$IMAGE_TAG"
-          echo "SPAAAAACE"
-          echo "PROD-${GITHUB_SHA}"
