@@ -23,8 +23,6 @@ jobs:
         run: echo "${{ github.ref_name }}"
       - name: 'Interp input string'
         run: echo "UAT-${{ inputs.image_tag }}"
-      - name: 'Tag Test'
-        run: 
 
   tag-test:
     name: tag-test
