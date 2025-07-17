@@ -31,9 +31,11 @@ jobs:
       - name: 'test'
         run: |
           if [[ "${GITHUB_REF}" == refs/tags/* || "${GITHUB_REF}" =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
-            IMAGE_TAG="${GITHUB_REF#refs/tags/}"
+            IMAGE_TAG="PROD-${GITHUB_REF}"
           else
             # Use the commit hash for non-release deployments when triggered by a workflow dispatch with branch
             IMAGE_TAG=$(echo $GITHUB_REF)
           fi
           echo "$IMAGE_TAG"
+          echo "SPAAAAACE"
+          echo "PROD-${GITHUB_REF}"
