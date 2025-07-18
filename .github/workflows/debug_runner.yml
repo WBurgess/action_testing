@@ -39,8 +39,8 @@ jobs:
       - name: Verify tag format
         if: contains(inputs.ENVIRONMENTS, 'prod')
         run: |
-          TAG_NAME=${{ inputs.COMMITISH || github.ref }}
-          if [[ "${TAG_NAME}" == refs/tags/* || "${TAG_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          TAG_INPUT=${{ inputs.COMMITISH }}
+          if [[ "${TAG_INPUT}" == refs/tags/* || "${TAG_INPUT}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "This is a release"
           else
             echo "ERROR: only tags with format vX.Y.Z are allowed for production deployments" >> $GITHUB_STEP_SUMMARY
@@ -49,11 +49,11 @@ jobs:
       - name: Set image tag
         id: set-image-tag
         run: |
-          TAG_NAME=${{ inputs.COMMITISH || github.sha }}
-          if [[ "${TAG_NAME}" == refs/tags/* || "${TAG_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            IMAGE_TAG="PROD-${GITHUB_SHA}"
+          TAG_INPUT=${{ inputs.COMMITISH }}
+          if [[ "${TAG_INPUT}" == refs/tags/* || "${TAG_INPUT}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            IMAGE_TAG="PROD-${GITHUB_REF}-${GITHUB_SHA}
           else
             # Use the commit hash for non-release deployments when triggered by a workflow dispatch with branch
-            IMAGE_TAG="UAT-${GITHUB_SHA}"
+            IMAGE_TAG="UAT-${GITHUB_REF}-${GITHUB_SHA}
           fi
           echo "$IMAGE_TAG"
