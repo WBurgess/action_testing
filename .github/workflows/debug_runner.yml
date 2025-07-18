@@ -3,9 +3,9 @@ name: Debug Runner
 on:
   workflow_dispatch:
     inputs:
-      ENVIRONMENT:
+      ENVIRONMENTS:
         type: string
-        description: Environment
+        description: ENVIRONMENTS
         required: true
       COMMITISH:
         type: string
@@ -34,12 +34,12 @@ jobs:
     steps:
       - name: Inputs
         run: |
-          echo "${{github.event.inputs.ENVIRONMENT}}"
-          echo "${{github.event.inputs.COMMITISH}}"
+          echo "${{inputs.ENVIRONMENTS}}"
+          echo "${{inputs.COMMITISH}}"
       - name: Verify tag format
-        if: contains(github.event.inputs.ENVIRONMENTS, 'prod')
+        if: contains(inputs.ENVIRONMENTS, 'prod')
         run: |
-          TAG_NAME=${{ github.event.inputs.COMMITISH || github.ref }}
+          TAG_NAME=${{ inputs.COMMITISH || github.ref }}
           if [[ "${TAG_NAME}" == refs/tags/* || "${TAG_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "This is a release"
           else
@@ -49,7 +49,7 @@ jobs:
       - name: Set image tag
         id: set-image-tag
         run: |
-          TAG_NAME=${{ github.event.inputs.COMMITISH || github.sha }}
+          TAG_NAME=${{ inputs.COMMITISH || github.sha }}
           if [[ "${TAG_NAME}" == refs/tags/* || "${TAG_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             IMAGE_TAG="PROD-${GITHUB_SHA}"
           else
