@@ -51,10 +51,10 @@ jobs:
         run: |
           TAG_INPUT=${{ inputs.COMMITISH }}
           if [[ "${TAG_INPUT}" =~ refs/tags/* || "${TAG_INPUT}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            IMAGE_TAG="PROD-${GITHUB_REF}-${GITHUB_SHA}
+            IMAGE_TAG="PROD-${GITHUB_REF}-${GITHUB_SHA}"
           else
             # Use the commit hash for non-release deployments when triggered by a workflow dispatch with branch
-            IMAGE_TAG="UAT-${GITHUB_REF}-${GITHUB_SHA}            
+            IMAGE_TAG="UAT-${GITHUB_REF}-${GITHUB_SHA}"
           fi
           echo "INPUT: $TAG_INPUT"
           echo "TAG: $IMAGE_TAG"
