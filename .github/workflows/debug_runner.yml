@@ -5,7 +5,7 @@ on:
     inputs:
       ENVIRONMENT:
         type: string
-        description: Image tag
+        description: Environment
         required: true
       COMMITISH:
         type: string
