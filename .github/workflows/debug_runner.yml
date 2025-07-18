@@ -56,4 +56,4 @@ jobs:
             # Use the commit hash for non-release deployments when triggered by a workflow dispatch with branch
             IMAGE_TAG="UAT-${GITHUB_REF}-${GITHUB_SHA}
           fi
-          echo "TAG: $IMAGE_TAG"
+          echo "TAG: ${IMAGE_TAG}"
