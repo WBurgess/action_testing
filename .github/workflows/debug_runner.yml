@@ -34,7 +34,8 @@ jobs:
     steps:
       - name: Inputs
         run: |
-          echo "${{github.event.inputs}}"
+          echo "${{github.event.inputs.ENVIRONMENT}}"
+          echo "${{github.event.inputs.COMMITISH}}"
       - name: Verify tag format
         if: contains(github.event.inputs.ENVIRONMENTS, 'prod')
         run: |
