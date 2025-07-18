@@ -3,10 +3,14 @@ name: Debug Runner
 on:
   workflow_dispatch:
     inputs:
-      image_tag:
+      ENVIRONMENT:
         type: string
         description: Image tag
-        required: false
+        required: true
+      COMMITISH:
+        type: string
+        description: Image tag
+        required: true
 
 jobs:
   debug:
@@ -28,9 +32,20 @@ jobs:
     name: tag-test
     runs-on: ubuntu-latest
     steps:
-      - name: 'test'
+      - name: Verify tag format
+        if: contains(github.event.inputs.ENVIRONMENTS, 'prod')
         run: |
-          TAG_NAME=${{ github.event.inputs.image_tag || github.sha }}
+          TAG_NAME=${{ github.event.inputs.COMMITISH || github.ref }}
+          if [[ "${TAG_NAME}" == refs/tags/* || "${TAG_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "This is a release"
+          else
+            echo "ERROR: only tags with format vX.Y.Z are allowed for production deployments" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+      - name: Set image tag
+        id: set-image-tag
+        run: |
+          TAG_NAME=${{ github.event.inputs.COMMITISH || github.sha }}
           if [[ "${TAG_NAME}" == refs/tags/* || "${TAG_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             IMAGE_TAG="PROD-${GITHUB_SHA}"
           else
