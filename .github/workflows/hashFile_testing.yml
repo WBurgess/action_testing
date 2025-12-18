@@ -10,7 +10,7 @@ jobs:
     steps:
         - name: Create some files with data
           run: |
-            mkdir apps/base/cypress/videos
+            mkdir -p apps/base/cypress/videos
             touch apps/base/cypress/videos/file1-compressed.mp4
 
         - name: Hash test - success
