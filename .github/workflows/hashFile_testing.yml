@@ -8,22 +8,19 @@ jobs:
     name: Create some files with data and serve up some hash browns
     runs-on: ubuntu-latest
     steps:
-        - name: Enable Corepack
+        - name: Create some files with data
           run: |
-            mkdir hashTest
-            touch hashTest/file1.txt
-            touch hashTest/file2.txt
-            echo "file1.txt" > hashTest/file1.txt
-            echo "file2.txt" > hashTest/file2.txt
+            mkdir apps/base/cypress/videos
+            touch apps/base/cypress/videos/file1-compressed.mp4
 
         - name: Hash test - success
           if: ${{ hashFiles('hashTest/file1.txt') != '' }}
           run: echo "SUCCESS"
 
-        - name: Hash test - success
-          if: ${{ hashFiles('hashTest/file2.txt') != '' }}
-          run: echo "SUCCESS"
-
         - name: Hash test - fail
-          if: ${{ hashFiles('apps/base/cypress/videos/**') != ''}}
-          run: echo "SHOULDNT SEE ME"
+          run: |
+            if find apps/base/cypress/videos -type f ! -name '*-compressed.mp4' -name '*.mp4' 2>/dev/null | grep -q .; then
+                echo "FOUND"
+            else
+                echo "No non-compressed videos found, skipping upload"
+            fi
