@@ -1,4 +1,4 @@
-name: Node Debug Runner
+name: HashFile Testing
 
 on:
   workflow_dispatch:
