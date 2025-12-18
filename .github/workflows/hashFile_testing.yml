@@ -1,0 +1,29 @@
+name: Node Debug Runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  hashFile:
+    name: Create some files with data and serve up some hash browns
+    runs-on: ubuntu-latest
+    steps:
+        - name: Enable Corepack
+          run: |
+            mkdir hashTest
+            touch hashTest/file1.txt
+            touch hashTest/file2.txt
+            echo "file1.txt" > hashTest/file1.txt
+            echo "file2.txt" > hashTest/file2.txt
+
+        - name: Hash test - success
+          if: ${{ hashFiles('hashTest/file1.txt') != '' }}
+          run: echo "SUCCESS"
+
+        - name: Hash test - success
+          if: ${{ hashFiles('hashTest/file2.txt') != '' }}
+          run: echo "SUCCESS"
+
+        - name: Hash test - fail
+          if: ${{ hashFiles('apps/base/cypress/videos/**') != ''}}
+          run: echo "SHOULDNT SEE ME"
