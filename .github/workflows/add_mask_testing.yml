@@ -32,6 +32,16 @@ jobs:
           echo "Line 2: SuperSecret12345 should be masked"
           echo "Line 3: also nothing secret"
 
+      - name: Mask a variable assigned from a function
+        run: |
+          generate_secret() {
+            echo "FromFunction_$(date +%s%N)"
+          }
+          FUNC_SECRET=$(generate_secret)
+          echo "::add-mask::$FUNC_SECRET"
+          echo "Assignment should not leak: $FUNC_SECRET"
+          echo "Literal check — if the value above is masked, the assignment was safe"
+
       - name: Mask a dynamic value
         run: |
           DYNAMIC_TOKEN=$(openssl rand -hex 16)
