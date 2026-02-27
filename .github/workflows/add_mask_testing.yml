@@ -1,0 +1,49 @@
+name: Add-Mask Testing
+
+on:
+  workflow_dispatch:
+
+jobs:
+  mask-secret:
+    name: Test add-mask workflow command
+    runs-on: ubuntu-latest
+    outputs:
+      secret-value: ${{ steps.set-secret.outputs.secret-value }}
+    steps:
+      - name: Set a masked value
+        id: set-secret
+        run: |
+          MY_SECRET="SuperSecret12345"
+          echo "::add-mask::$MY_SECRET"
+          echo "SECRET=$MY_SECRET" >> "$GITHUB_ENV"
+          echo "secret-value=$MY_SECRET" >> "$GITHUB_OUTPUT"
+
+      - name: Print masked value directly
+        run: |
+          echo "This should be masked: SuperSecret12345"
+
+      - name: Print masked value from env
+        run: |
+          echo "From env: $SECRET"
+
+      - name: Mask appears in multiline output
+        run: |
+          echo "Line 1: nothing secret here"
+          echo "Line 2: SuperSecret12345 should be masked"
+          echo "Line 3: also nothing secret"
+
+      - name: Mask a dynamic value
+        run: |
+          DYNAMIC_TOKEN=$(openssl rand -hex 16)
+          echo "::add-mask::$DYNAMIC_TOKEN"
+          echo "Token before mask registration: $DYNAMIC_TOKEN"
+          echo "The token above should be masked in logs"
+
+  consume-secret:
+    name: Consume masked secret from another job
+    runs-on: ubuntu-latest
+    needs: mask-secret
+    steps:
+      - name: Echo the masked secret
+        run: |
+          echo "Received secret: ${{ needs.mask-secret.outputs.secret-value }}"
