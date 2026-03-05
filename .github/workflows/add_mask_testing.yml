@@ -57,3 +57,29 @@ jobs:
       - name: Echo the masked secret
         run: |
           echo "Received secret: ${{ needs.mask-secret.outputs.secret-value }}"
+
+  consume-and-remask:
+    name: Receive masked output and re-mask in downstream job
+    runs-on: ubuntu-latest
+    needs: mask-secret
+    steps:
+      - name: Re-mask the received value
+        id: remask
+        run: |
+          INCOMING="${{ needs.mask-secret.outputs.secret-value }}"
+          echo "::add-mask::$INCOMING"
+          echo "re-masked=$INCOMING" >> "$GITHUB_OUTPUT"
+
+      - name: Use re-masked value (should be redacted)
+        run: |
+          echo "Direct reference: ${{ needs.mask-secret.outputs.secret-value }}"
+          echo "Re-masked output: ${{ steps.remask.outputs.re-masked }}"
+          echo "Inline literal that matches: SuperSecret12345"
+
+      - name: Pass re-masked value through env
+        run: |
+          echo "DOWNSTREAM_SECRET=${{ steps.remask.outputs.re-masked }}" >> "$GITHUB_ENV"
+
+      - name: Print from env (should still be redacted)
+        run: |
+          echo "From env in downstream job: $DOWNSTREAM_SECRET"
